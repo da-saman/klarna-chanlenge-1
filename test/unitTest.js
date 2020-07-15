@@ -3,8 +3,8 @@ const { assert, expect } = require("chai");
 const {
   getBalanceByCategoryInPeriod,
   getBalance,
-  getInCategory,
-  getInTimePeriod,
+  filterByCategory,
+  filterByTimePeriod,
 } = require("../src/index");
 const { it } = require("mocha");
 
@@ -96,17 +96,17 @@ describe("getBalance()", function () {
   });
 });
 
-describe("getInCategory()", function () {
+describe("filterByCategory()", function () {
   it("returns [] if there is no transaction", function () {
-    expect(getInCategory([], "eating_out")).to.eql([]);
+    expect(filterByCategory([], "eating_out")).to.eql([]);
   });
 
   it("returns [] if there is no such category", function () {
-    expect(getInCategory(transactions, "play")).to.eql([]);
+    expect(filterByCategory(transactions, "play")).to.eql([]);
   });
 
   it("returns proper array ", function () {
-    expect(getInCategory(transactions, "eating_out")).to.eql([
+    expect(filterByCategory(transactions, "eating_out")).to.eql([
       {
         id: 123,
         sourceAccount: "my_account",
@@ -127,16 +127,16 @@ describe("getInCategory()", function () {
   });
 });
 
-describe("getInTimePeriod()", function () {
+describe("filterByTimePeriod()", function () {
   it("returns [] if there is no transaction", function () {
     expect(
-      getInTimePeriod([], new Date("2018-03-01"), new Date("2018-03-31"))
+      filterByTimePeriod([], new Date("2018-03-01"), new Date("2018-03-31"))
     ).to.eql([]);
   });
 
   it("returns [] if there is no transaction in period", function () {
     expect(
-      getInTimePeriod(
+      filterByTimePeriod(
         transactions,
         new Date("2018-03-20"),
         new Date("2018-03-31")
@@ -146,7 +146,7 @@ describe("getInTimePeriod()", function () {
 
   it("returns [] if start > end", function () {
     expect(
-      getInTimePeriod(
+      filterByTimePeriod(
         transactions,
         new Date("2018-03-31"),
         new Date("2018-03-20")
@@ -155,7 +155,7 @@ describe("getInTimePeriod()", function () {
   });
   it("inclusive start and exclusive end", function () {
     expect(
-      getInTimePeriod(
+      filterByTimePeriod(
         transactions,
         new Date("2018-03-10T12:34:00Z"),
         new Date("2018-03-14T12:34:00Z")
@@ -174,7 +174,7 @@ describe("getInTimePeriod()", function () {
 
   it("returns proper array ", function () {
     expect(
-      getInTimePeriod(
+      filterByTimePeriod(
         transactions,
         new Date("2018-03-14"),
         new Date("2018-03-17")

@@ -26,7 +26,7 @@
 //     time: "2018-04-10T12:34:00Z",
 //   },
 // ];
-const getInTimePeriod = (transactions, start, end) =>
+const filterByTimePeriod = (transactions, start, end) =>
   transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.time);
     return (
@@ -35,7 +35,7 @@ const getInTimePeriod = (transactions, start, end) =>
     );
   });
 
-const getInCategory = (transactions, category) =>
+const filterByCategory = (transactions, category) =>
   transactions.filter((transaction) => {
     return transaction.category === category;
   });
@@ -44,13 +44,12 @@ const getBalance = (transactions) =>
   transactions.reduce((acc, curr) => acc + curr.amount, 0);
 
 function getBalanceByCategoryInPeriod(transactions = [], category, start, end) {
-  const inPeriod = getInTimePeriod(transactions, start, end);
-  const inCategoryAndPeriod = getInCategory(inPeriod, category);
+  const inPeriod = filterByTimePeriod(transactions, start, end);
+  const inCategoryAndPeriod = filterByCategory(inPeriod, category);
   return getBalance(inCategoryAndPeriod);
 }
-console.log(getInCategory([], ""));
 
 exports.getBalanceByCategoryInPeriod = getBalanceByCategoryInPeriod;
 exports.getBalance = getBalance;
-exports.getInCategory = getInCategory;
-exports.getInTimePeriod = getInTimePeriod;
+exports.filterByCategory = filterByCategory;
+exports.filterByTimePeriod = filterByTimePeriod;
